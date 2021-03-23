@@ -17,3 +17,20 @@
 """
 
 ignore = ["duplex", "alias", "configuration"]
+from sys import argv
+ignore = ["duplex", "alias", "configuration"]
+i = True
+with open (argv[1]) as config, open('result.txt','w') as result:
+    for line in config:
+        if line.startswith('!'):
+            continue
+        else:
+            for word in line.split():
+                if word in ignore:
+                    i = False
+                    break
+                else:
+                    i = True
+            if i is True:
+                print(line.strip())
+                result.write(line)
