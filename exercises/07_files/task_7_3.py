@@ -20,3 +20,9 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+for i in l.strip().split('\n'):
+    if i.lstrip() == '':
+        continue
+    else:
+        if i[-1].isdigit():
+print(a)
