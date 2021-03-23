@@ -15,5 +15,19 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
-
+from sys import argv
 ignore = ["duplex", "alias", "configuration"]
+i = True
+with open (argv[1]) as config:
+    for line in config:
+        if line.startswith('!'):
+            continue
+        else:
+            for word in line.split():
+                if word in ignore:
+                    i = False
+                    break
+                else:
+                    i = True
+            if i is True:
+                print(line.strip())
