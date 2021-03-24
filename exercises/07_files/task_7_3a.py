@@ -23,3 +23,14 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+a = []
+out = '{:8} {:15} {:>8}'
+with open ('CAM_table.txt') as table:
+    for line in table:
+        line = line.lstrip()
+        if line != '' and line[0].isdigit():
+            a.append([j for j in line.strip().split()])
+            a.sort()
+        else: continue
+    for vlan,mac,_,port in a:
+        print (out.format(vlan,mac,port))
