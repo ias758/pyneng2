@@ -20,9 +20,13 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
-for i in l.strip().split('\n'):
-    if i.lstrip() == '':
-        continue
-    else:
-        if i[-1].isdigit():
-print(a)
+a = []
+out = '{:8} {:15} {:>8}'
+with open ('CAM_table.txt') as table:
+    for line in table:
+        line = line.lstrip()
+        if line != '' and line[0].isdigit():
+            a.append([j for j in line.strip().split()])
+        else: continue
+    for vlan,mac,_,port in a:
+        print (out.format(vlan,mac,port))
