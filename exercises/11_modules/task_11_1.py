@@ -43,6 +43,16 @@ def parse_cdp_neighbors(command_output):
     и с файлами и с выводом с оборудования.
     Плюс учимся работать с таким выводом.
     """
+    result = {}
+    for line in command_output.split('\n'):
+        row = line.strip()
+        column = row.split()
+        if '>' in row:
+            device = line.split('>')[0]
+        elif len(column) > 5 and column[3].isdigit(): 
+            dev, localport, localint, *other, intfs, port = column
+            result[device, localport + localint] = (dev, intfs + port)
+    return result
 
 
 if __name__ == "__main__":
