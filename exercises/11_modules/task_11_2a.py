@@ -73,10 +73,43 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
-
+from task_11_1 import parse_cdp_neighbors
+from task_11_2 import create_network_map as net
+from pprint import pprint
 infiles = [
     "sh_cdp_n_sw1.txt",
     "sh_cdp_n_r1.txt",
     "sh_cdp_n_r2.txt",
     "sh_cdp_n_r3.txt",
 ]
+
+
+def unique_network_map(topology_dict):
+    net_table = list(topology_dict.items())
+    for i in net_table:
+        if i[::-1] in net_table:
+            net_table.remove(i[::-1])
+    return dict(net_table)
+
+
+pprint(unique_network_map(net(infiles)))
+
+'''
+Answer
+
+def unique_network_map(topology_dict):
+    network_map = {}
+    for key, value in topology_dict.items():
+        if not network_map.get(value) == key:
+            network_map[key] = value
+    return network_map
+
+
+# второй вариант решения
+def unique_network_map(topology_dict):
+    network_map = {}
+    for key, value in topology_dict.items():
+        key, value = sorted([key, value])
+        network_map[key] = value
+    return network_map
+    '''
