@@ -18,3 +18,14 @@ Reachable    Unreachable
              10.1.1.9
 
 """
+from tabulate import tabulate
+from task_12_1 import ping_ip_addresses
+addresses = ['8.8.8.8', '255.254.252.1', '10.110.1.1']
+
+def print_ip_table(address):
+    table = {'Reachable':ping_ip_addresses(address)[0],'Unreachable':ping_ip_addresses(address)[1]}
+    print(tabulate(table, headers = 'keys'))
+
+
+if __name__ == "__main__":
+    print_ip_table(addresses)
