@@ -29,3 +29,20 @@ def print_ip_table(address):
 
 if __name__ == "__main__":
     print_ip_table(addresses)
+
+'''
+Модификация функции в 12_1 
+
+
+from tabulate import tabulate
+from task_12_1 import ping_ip_addresses
+addresses = ['8.8.8.8', '255.254.252.1', '10.110.1.1']
+
+def print_ip_table(address):
+    table = ping_ip_addresses(address)
+    print(tabulate(table, headers = 'keys'))
+
+
+if __name__ == "__main__":
+    print_ip_table(addresses)
+'''
