@@ -33,3 +33,28 @@ def ping_ip_addresses(address):
 
 if __name__ == "__main__":
     print(ping_ip_addresses(addresses))   
+    
+    
+'''
+Модификация функции
+import subprocess
+
+addresses = ['8.8.8.8', '255.254.252.1', '10.110.1.1']
+
+
+def ping_ip_addresses(address):
+    reachable = []
+    unreachable = []
+    result = {'Reachable':reachable,'Unreachable':unreachable}
+    for ip in address:
+        reply = subprocess.run(['ping', '-n', '1', ip], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if reply.returncode == 0:
+            reachable.append(ip)
+        else:
+            unreachable.append(ip)
+    return result
+
+
+if __name__ == "__main__":
+    print(ping_ip_addresses(addresses))    
+'''
