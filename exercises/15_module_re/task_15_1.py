@@ -27,17 +27,13 @@ import re
 
 
 def get_ip_from_cfg(config):
-    ip_mask = []
-    intf = {}
+    result = []
     with open(config) as config:
         for line in config:
-            match_intf = re.search(r'interface (\S+)',line)
-            a = match_intf.group()
-            match_ip = re.search(r'address (\S+) (\S+)', line)
-            if match_ip:
-                intf[a] = ip_mask.append(match_ip.groups())
-                
-    return intf
+            match = re.search(r'address (\S+) (\S+)', line)
+            if match:
+                result.append(match.groups())
+    return result
                 
 
-print(get_ip_from_cfg('config_r1.txt')) 
+print(get_ip_from_cfg('config_r1.txt'))   
