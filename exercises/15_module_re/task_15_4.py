@@ -26,7 +26,6 @@ import re
 
 
 def get_ints_without_description(file):
-    result = []
     with open(file) as f:
         match_int_descr = re.finditer(
         'interface (?P<intf>\w+\S+)\n'
