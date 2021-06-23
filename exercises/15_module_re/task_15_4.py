@@ -32,9 +32,10 @@ def get_ints_without_description(file):
         'interface (?P<intf>\w+\S+)\n'
         '(?P<descr> description .*)*',f.read(),
         )
-        for m in match_int_descr:
-            if not m.lastgroup == 'descr':
-                result.append(m.group('intf'))
+        result = [m.group('intf') for m in match_int_descr if m.lastgroup == 'intf']
+        #for m in match_int_descr:
+            #if not m.lastgroup == 'descr':
+                #result.append(m.group('intf'))
     return result
 
 
