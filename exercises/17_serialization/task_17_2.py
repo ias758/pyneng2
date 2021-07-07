@@ -115,3 +115,64 @@ if __name__ == "__main__":
     sh_version_files = glob.glob("sh_vers*")
     write_inventory_to_csv(sh_version_files, "routers_inventory.csv")
 '''
+'''
+#Эмиль редактор
+import glob
+import re
+import csv
+
+
+sh_version_files = glob.glob("sh_vers*") # файлы с выводом команд
+#print(sh_version_files) 
+
+HEADERS = ["hostname", "ios", "image", "uptime"] # заголовки для таблицы
+IOS = r'.+ Version (\d+\.\S+),'   
+IMAGE = r'System .+ \"(\S+)\"'
+UPTIME = r'router uptime is (.+)\n'
+HOST = r'version_(\S+).txt$'
+
+
+def parsing_from_file(filename): 
+# Функция парсит из файла данные регулярками и возвращает словарь    
+
+    with open(filename) as file:
+        data = {}     # Создаем словарь с ключами заголовков
+        for line in file:# Перебираем строки в файле, проверяем регулярки
+            match_ios = re.search(IOS, line)
+            match_image = re.search(IMAGE, line)
+            match_uptime = re.search(UPTIME, line)
+            match_hostname = re.search(HOST, filename)
+            
+            if match_ios:
+                data['ios'] = match_ios.group(1) # Наполняем пустой словарь
+            elif match_image:
+                data['image'] = match_image.group(1)
+            elif match_uptime:
+                data['uptime'] = match_uptime.group(1)
+            data['hostname'] = match_hostname.group(1)
+
+    return data # Возвращает словарь
+
+
+def writing_in_csv(data, csv_filename):
+# Функция принимает список словарей и возвращает файл в формате csv
+    with open(csv_filename, 'w') as result:
+        writer = csv.DictWriter(result, fieldnames = HEADERS) # словарь в запись csv
+        writer.writeheader()   # пишем заголовки 
+
+        for d in data:         # заполняем таблицу
+            writer.writerow(d)
+
+
+def write_inventory_to_csv(data_filenames, csv_filename):
+# Функция принимает на вход файлы txt возвращает сводный файл в формате csv
+    data_out = []
+
+    for filename in sh_version_files:  # Перебираем файлы
+        data_out.append(parsing_from_file(filename)) # Собираем список словарей
+    writing_in_csv(data_out, csv_filename)
+
+                   
+if __name__ == '__main__':
+    write_inventory_to_csv(sh_version_files, 'out_17_2.csv' )
+'''
