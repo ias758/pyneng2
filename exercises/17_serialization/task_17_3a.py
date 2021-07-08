@@ -36,3 +36,48 @@
 в файл topology.yaml. Он понадобится в следующем задании.
 
 """
+import re
+import glob
+import yaml
+
+
+def parse_sh_cdp_neighbors(filename):
+# Обработка одного файла
+
+    result = {}
+    regex = re.compile(r'(?P<r_dev>\S+) + (?P<l_intfs>\S+ \d+/\d+).+ (?P<r_intfs>\S+ \d+/\d+)')
+
+    with open(filename, 'r') as data:
+
+        data = data.read()
+        l_dev = re.search(r'(\S+)>', data).group(1)
+        result[l_dev] = {}
+
+        for match in regex.finditer(data):
+            r_dev, l_intfs, r_intfs = match.group('r_dev', 'l_intfs', 'r_intfs')
+            result[l_dev][l_intfs] = {r_dev: r_intfs}
+
+    return result
+
+
+def yaml_writer(filename, data):
+# Запись в файл формат yaml
+    with open(filename, 'w') as file:
+        yaml.dump(data, file, default_flow_style=False)
+
+    
+def generate_topology_from_cdp(list_of_files, save_to_filename = None):
+# Формирование словаря топологии
+    result = {}
+
+    for file in glob.glob('sh_cdp_n_*'):
+        result.update(parse_sh_cdp_neighbors(file))
+
+    if save_to_filename is not None:
+        yaml_writer(save_to_filename, result)
+
+    return result
+
+        
+if __name__ == '__main__':
+    print(generate_topology_from_cdp(glob.glob('sh_cdp_n_*'), 'out_17_3a.yaml'))
