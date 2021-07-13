@@ -41,18 +41,67 @@ C-3PO,c3po@gmail.com,16/12/2019 17:24
 
 """
 
+import csv
 import datetime
 
 
 def convert_str_to_datetime(datetime_str):
-    """
+    '''
     Конвертирует строку с датой в формате 11/10/2019 14:05 в объект datetime.
-    """
-    return datetime.datetime.strptime(datetime_str, "%d/%m/%Y %H:%M")
+    '''
+    return datetime.datetime.strptime(datetime_str, '%d/%m/%Y %H:%M')
 
 
 def convert_datetime_to_str(datetime_obj):
-    """
+    '''
     Конвертирует строку с датой в формате 11/10/2019 14:05 в объект datetime.
-    """
-    return datetime.datetime.strftime(datetime_obj, "%d/%m/%Y %H:%M")
+    '''
+    return datetime.datetime.strftime(datetime_obj, '%d/%m/%Y %H:%M')
+
+
+def read_csv_file(filename):
+    '''
+    Чтение файла csv
+    '''
+    with open(filename) as f:
+        DATA = list(csv.reader(f))
+
+    return DATA
+
+        
+def sort_date(data):
+    '''
+    Выбор данных из таблицы и изменение их формата
+    '''
+    return convert_str_to_datetime(data[2])
+
+
+def write_csv(data, headers, filename):
+    '''
+    Запись в файл формат csv
+    '''
+    with open(filename, 'w') as f:
+        writer = csv.writer(f)
+        writer.writerow(headers)
+
+        for row in data.values():
+            writer.writerow(row)
+
+
+def write_last_log_to_csv(source_log, output):
+    '''
+    Обработка файла
+    '''
+    RESULT = {}
+    FILE = read_csv_file(source_log)
+    HEADERS = FILE[0]
+    SORTED_LIST = sorted(FILE[1:], key = sort_date)
+
+    for NAME, MAIL, DATE in SORTED_LIST:
+        RESULT[MAIL] = (NAME, MAIL, DATE)
+    
+    write_csv(RESULT, HEADERS, output)
+    
+    
+if __name__ == '__main__':
+    print(write_last_log_to_csv('mail_log.csv', '17_4_out.csv'))
