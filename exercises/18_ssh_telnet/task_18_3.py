@@ -47,6 +47,27 @@ In [16]: send_commands(r1, config=commands)
 Out[16]: 'config term\nEnter configuration commands, one per line.  End with CNTL/Z.\nR1(config)#username user5 password pass5\nR1(config)#username user6 password pass6\nR1(config)#end\nR1#'
 
 """
+import yaml
+from task_18_2c import (break_if_no, send_config_commands)
+from task_18_1b import send_show_command
 
-commands = ["logging 10.255.255.1", "logging buffered 20010", "no logging console"]
-command = "sh ip int br"
+
+def send_commands(dev, *, show = None, config = None):
+    if show and config:
+        
+        raise ValueError('Передайте только один аргумент')
+    
+    elif show: return send_show_command(dev, show)
+    
+    elif config: return send_config_commands(dev, config)
+
+if __name__ == '__main__':
+    
+    commands = ['interface f0/22', 'description Test_Script_3']
+    command = "sh ip int br"
+    with open("devices.yaml") as f:
+        devices = yaml.safe_load(f)
+
+    for dev in devices:
+        print(send_commands(dev, config=commands))
+        print(send_commands(dev, show=command))
